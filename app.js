@@ -1,3 +1,5 @@
+import { WxDataHandler } from "./modules/wxHandler.js";
+
 const baseURL = 'https://api.synopticdata.com/v2/';
 const timeURL = 'stations/timeseries';
 
@@ -14,7 +16,7 @@ button.addEventListener('click', (e) => {
 
     console.log(startDate);
 
-    const params = `?stid=${station}&recent=240&hfmetars=0`;
+    const params = `?stid=${station}&recent=240&hfmetars=0&units=english,speed|kts,temp|C&obtimezone=local`;
 
     fetch(baseURL + timeURL + params + token).then(
         response => {
