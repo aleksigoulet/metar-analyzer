@@ -155,6 +155,54 @@ describe('wxHandler.seperateDays()', () => {
   });
 });
 
+describe('wxHandler.seperateHalfDays()', () => {
+  it('creates an array of days seperated in half days', () => {
+    const inputData = {
+      STATION: [
+        {
+          OBSERVATIONS: {
+            date_time: [
+              "2022-04-23T03:54:00-0400",
+              "2022-04-23T10:54:00-0400",
+              "2022-04-23T12:54:00-0400",
+              "2022-04-23T18:54:00-0400",
+              "2022-04-24T00:54:00-0400",
+              "2022-04-24T11:54:00-0400",
+              "2022-04-24T15:54:00-0400",
+              "2022-04-24T23:54:00-0400"
+            ],
+            visibility_set_1: [10, 10, 10, 10, 10, 10, 10, 10],
+            metar_set_1: [
+              "KBOS 231654Z 13007KT 10SM FEW200 SCT250 13/M01 A3031 RMK AO2  SLP263 T01281011",
+              "KBOS 231654Z 13007KT 10SM FEW200 SCT250 13/M01 A3031 RMK AO2  SLP263 T01281011",
+              "KBOS 240554Z 13007KT 10SM FEW200 SCT250 13/M01 A3031 RMK AO2  SLP263 T01281011",
+              "KBOS 240654Z 13007KT 10SM FEW200 SCT250 13/M01 A3031 RMK AO2  SLP263 T01281011",
+              "KBOS 231654Z 13007KT 10SM FEW200 SCT250 13/M01 A3031 RMK AO2  SLP263 T01281011",
+              "KBOS 231654Z 13007KT 10SM FEW200 SCT250 13/M01 A3031 RMK AO2  SLP263 T01281011",
+              "KBOS 240554Z 13007KT 10SM FEW200 SCT250 13/M01 A3031 RMK AO2  SLP263 T01281011",
+              "KBOS 240654Z 13007KT 10SM FEW200 SCT250 13/M01 A3031 RMK AO2  SLP263 T01281011"
+            ]
+          }
+        }
+      ]
+    };
+
+    const expected = [
+      [
+        [0,1],[2,3]
+      ],
+      [
+        [4,5],[6,7]
+      ]
+    ];
+
+    const result = wxHandler.seperateHalfDays(inputData);
+
+    assert.deepStrictEqual(result, expected);
+
+  });
+});
+
 describe('wxHandler.getVis()', ()=> {
     it('gets visibility from single observation', ()=> {
         const inputData = {

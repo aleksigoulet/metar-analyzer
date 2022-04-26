@@ -57,9 +57,44 @@ class WxDataHandler {
         //get input data
         const datesArr =  obj.STATION[0].OBSERVATIONS.date_time;
         //make days array
-        const daysArr = this.seperateDays(datesArr);
+        const daysArr = this.seperateDays(obj);
         //seperate into halfdays
 
+        let seperatedArray = []; //used to store result
+        let singleDay = []; //store one day
+        let ind = datesArr.length - 1; //variable to keep track of index being worked with
+
+        for(let i = daysArr.length - 1; i >= 0; i--) {
+
+            let am = [];
+            let pm = [];
+
+            for(let j = daysArr[i].length - 1; j >= 0; j--) {
+
+                const currentTime = datesArr[ind].substring(11, 19);
+                //add index to halfday
+                if(currentTime < '12:00'){
+                    am.unshift(ind);
+                } else {
+                    pm.unshift(ind);
+                }
+
+                ind--;
+
+            }
+
+            //add am and pm to single day
+            singleDay.unshift(pm);
+            singleDay.unshift(am);
+
+            //push single day to result
+            seperatedArray.unshift(singleDay);
+
+            //reset single day
+            singleDay = [];
+        }
+
+        return seperatedArray;
         
     }
 
