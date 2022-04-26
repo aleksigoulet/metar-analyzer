@@ -45,7 +45,17 @@ button.addEventListener('click', (e) => {
                 // document.getElementById('result').innerHTML = jsonResponse.STATION[0].OBSERVATIONS.metar_set_1;
                 const daysArr = wxHandler.seperateDays(jsonResponse);
                 console.log(daysArr);
-                document.getElementById('result').innerHTML = `${daysArr.length} days of data received.`;
+
+                const daysHA = wxHandler.seperateHalfDays(jsonResponse);
+                console.log(daysHA);
+
+                let resultEl = document.getElementById('result');
+
+                resultEl.appendChild(document.createElement('p')).innerHTML = `${daysArr.length} days of data received.`;
+
+                const condReport = wxHandler.conditions(jsonResponse);
+
+                resultEl.appendChild(document.createElement('p')).innerHTML = `${condReport.total} days analyzed. ${condReport.vfr} days are operationally usable.<br> ${condReport.vfrBoth} days are usable both morning and afternoon.<br> ${condReport.vfrAM} days are usable in the morning only.<br> ${condReport.vfrPM} days are usable in the afternoon only`;
             }
 
         }

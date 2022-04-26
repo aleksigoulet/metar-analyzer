@@ -1,21 +1,129 @@
-class WxDataHandler {
+class WxDataHandler { 
     conditions(obj) {
-        const daysIndex = this.seperateDays(obj);
+        const daysIndex = this.seperateHalfDays(obj);
 
+        const sortedCond = this.condByHalfDay(obj, daysIndex);
+
+        const totalDays = sortedCond.length;
+        let vfrDay = 0;
+        let vfrAM = 0;
+        let vfrPM = 0;
+        let vfrBoth = 0;
+        let ifrDay = 0;
+
+        for (const day of sortedCond) {
+            //make sure only full days of date are used (to account for timezone difference in request)
+            if(day.length != 2) {
+                continue;
+            }
+
+            //add days count to appropriate variable
+            if(day[0] && day[1]) {
+                vfrBoth++;
+                vfrDay++;
+            } else if(day[0] && !day[1]) {
+                vfrAM++;
+                vfrDay++;
+            } else if(!day[0] && day[1]) {
+                vfrPM++;
+                vfrDay++;
+            } else {
+                ifrDay++;
+            }
+
+        };
+
+        return {total: totalDays, vfr: vfrDay, vfrAM: vfrAM, vfrPM: vfrPM, vfrBoth: vfrBoth, ifr: ifrDay};
+
+
+
+        //////////// OLD BELOW ////////////////
+
+        /*
         let totalDays = daysIndex.length;
         let ifrDays = 0;
         let vfrDays = 0;
 
-        daysIndex.forEach(el => {
-            const avgVis = this.calcAvgVis(obj, el);
-            if(avgVis <= 3){
-                ifrDays++;
-            } else {
-                vfrDays++;
-            }
+        
+        daysIndex.forEach(day => {
+            // const avgVis = this.calcAvgVis(obj, el);
+            // if(avgVis <= 3){
+            //     ifrDays++;
+            // } else {
+            //     vfrDays++;
+            // }
+
+            day.forEach(half => {
+                //init variables to keep track of reports with ifr or vfr conditions
+                let ifrConds = 0;
+                let vfrConds = 0;
+                //loop through half days and determine how many reports are ifr or vfr
+                for(let i = 0; i < half.length; i++) {
+                    const vis = this.getVis(obj, half[i]);
+
+                    if(vis < 3){
+                        ifrConds++;
+                    } else {
+                        vfrConds++;
+                    }
+                }
+
+                if(vfrConds < ifrConds) {
+                    ifrDays++;
+                } else {
+                    vfrDays++;
+                }
+
+            });
         });
 
         return {total: totalDays, ifr: ifrDays, vfr: vfrDays}
+        */
+    }
+
+    condByHalfDay(obj, arr) { //function that returns whether a half day is suitable or not
+        //variables to store results
+        let output = [];
+        let singleDay = [];
+
+        //loop through 2D array to check conditions
+        arr.forEach(day => {
+            for(let i = 0; i < day.length; i++) {
+                //only create output for full days
+                if(day.length == 2) {
+                    if(day[0] === [] || day[1] === []) {
+                        continue;
+                    }
+                    let ifrConds = 0;
+                    let vfrConds = 0;
+                    //calc conditions for each half day
+                    for(let j = 0; j < day[i].length; j++) {
+                        const vis = this.getVis(obj, day[i][j]);
+                        const ceil = this.getCeil(obj, day[i][j]);
+    
+                        if(vis < 3 || (ceil < 1000 && ceil !== null)){
+                            ifrConds++;
+                        } else {
+                            vfrConds++;
+                        }
+                    }
+                    
+                    //if half day has more IFR value is false, otherwise value is true.
+                    if(vfrConds < ifrConds) {
+                        singleDay.push(false);
+                    } else {
+                        singleDay.push(true);
+                    }
+                }
+            }
+
+            output.push(singleDay);
+            singleDay = []; //reset variable for next day
+
+        });
+
+       return output;
+
     }
 
     seperateDays(obj) {
@@ -98,8 +206,12 @@ class WxDataHandler {
 
     }
 
-    getVis(obj) {
-        return obj.STATION[0].OBSERVATIONS.visibility_set_1[0];
+    getVis(obj, ind) {
+        return obj.STATION[0].OBSERVATIONS.visibility_set_1[ind];
+    }
+
+    getCeil(obj, ind) {
+        return obj.STATION[0].OBSERVATIONS.ceiling_set_1[ind];
     }
 
     calcAvgVis(obj, arr) {
