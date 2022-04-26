@@ -175,3 +175,68 @@ describe('wxHandler.getVis()', ()=> {
         assert.strictEqual(result, expected);
     });
 });
+
+describe('wxHandler.calcAvgVis()', () => {
+  it('calculates the average visibility given an array of indexes for vis values', () => {
+    const inputData = {
+      STATION: [
+        {
+          OBSERVATIONS: {
+            date_time: [
+              "2022-04-23T12:54:00-0400",
+              "2022-04-23T13:54:00-0400",
+              "2022-04-24T01:54:00-0400",
+              "2022-04-24T02:54:00-0400"
+            ],
+            visibility_set_1: [8, 12, 10, 13],
+            metar_set_1: [
+              "KBOS 231654Z 13007KT 8SM FEW200 SCT250 13/M01 A3031 RMK AO2  SLP263 T01281011",
+              "KBOS 231654Z 13007KT 12SM FEW200 SCT250 13/M01 A3031 RMK AO2  SLP263 T01281011",
+              "KBOS 240554Z 13007KT 10SM FEW200 SCT250 13/M01 A3031 RMK AO2  SLP263 T01281011",
+              "KBOS 240654Z 13007KT 13SM FEW200 SCT250 13/M01 A3031 RMK AO2  SLP263 T01281011"
+            ]
+          }
+        }
+      ]
+    };
+
+    const expected = 10;
+
+    const result = wxHandler.calcAvgVis(inputData, [0, 1]);
+
+    assert.strictEqual(result, expected);
+
+  });
+});
+
+describe('wxHandler.conditions()', () => {
+  it('returns an object of conditions with ifr and vfr days', () => {
+    const inputData = {
+      STATION: [
+        {
+          OBSERVATIONS: {
+            date_time: [
+              "2022-04-23T12:54:00-0400",
+              "2022-04-23T13:54:00-0400",
+              "2022-04-24T01:54:00-0400",
+              "2022-04-24T02:54:00-0400"
+            ],
+            visibility_set_1: [1, 2, 10, 13],
+            metar_set_1: [
+              "KBOS 231654Z 13007KT 1SM FEW200 SCT250 13/M01 A3031 RMK AO2  SLP263 T01281011",
+              "KBOS 231654Z 13007KT 2SM FEW200 SCT250 13/M01 A3031 RMK AO2  SLP263 T01281011",
+              "KBOS 240554Z 13007KT 10SM FEW200 SCT250 13/M01 A3031 RMK AO2  SLP263 T01281011",
+              "KBOS 240654Z 13007KT 13SM FEW200 SCT250 13/M01 A3031 RMK AO2  SLP263 T01281011"
+            ]
+          }
+        }
+      ]
+    };
+
+    const expected = {total: 2, ifr: 1, vfr: 1};
+
+    const result = wxHandler.conditions(inputData);
+
+    assert.deepStrictEqual(result, expected);
+  });
+});
