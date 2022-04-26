@@ -53,7 +53,7 @@ class WxDataHandler {
         return daysArr;
     }
 
-    seperateHalfDays(obj) {
+    seperateHalfDays(obj) { //creates a 3D array of indexes organized by halfdays
         //get input data
         const datesArr =  obj.STATION[0].OBSERVATIONS.date_time;
         //make days array
@@ -95,7 +95,7 @@ class WxDataHandler {
         }
 
         return seperatedArray;
-        
+
     }
 
     getVis(obj) {
