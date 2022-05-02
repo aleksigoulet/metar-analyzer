@@ -100,8 +100,9 @@ class WxDataHandler {
                     for(let j = 0; j < day[i].length; j++) {
                         const vis = this.getVis(obj, day[i][j]);
                         const ceil = this.getCeil(obj, day[i][j]);
+                        const obs = this.getWxCondCodes(obj, 0, day[i][j]);
     
-                        if(vis < 3 || (ceil < 1000 && ceil !== null)){
+                        if(vis < 3 || (ceil < 1000 && ceil !== null) || obs){
                             ifrConds++;
                         } else {
                             vfrConds++;
@@ -226,6 +227,19 @@ class WxDataHandler {
         acc = acc/arr.length;
 
         return acc;
+    }
+
+    getWxCondCodes(obj, condToFind, ind) { //gets condition code for wx, can be used to compare with data if certain wx present
+        const condString = obj.STATION[0].OBSERVATIONS.weather_condition_set_1d[ind];
+
+        if(condString == null) {
+            return false;
+        } else if(condString.includes('snow') || condString.includes('rain') || condString.includes('fog')) {
+            return true;
+        } else {
+            return false;
+        }
+
     }
 }
 
