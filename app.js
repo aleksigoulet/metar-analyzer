@@ -14,6 +14,7 @@ const stationInput = document.getElementById('station');
 
 button.addEventListener('click', (e) => {
     e.preventDefault();
+
     const station = stationInput.value;
     let startDate = document.getElementById('start').value;
     let endDate = document.getElementById('end').value;

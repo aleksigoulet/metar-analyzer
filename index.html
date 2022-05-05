@@ -15,11 +15,42 @@
         <label for="end">End Date:</label>
         <input type="date" id="end" name="end">
         <br>
+        <br>
+        <label for="visValue" class="visLabel">1</label>
+        <input type="range" id="visValue" name="visValue" min="1" max="10" step="1" value="3">
+        <label for="visValue" class="visLabel">10</label>
+        <br>
+        <label for="visValue" id="visOutput"></label>
+        <br>
+        <br>
+        <label for="ceilValue">Lowest Acceptable Ceiling:</label>
+        <input type="number" id="ceilValue" name="ceilValue" min="0" placeholder="0" step="100">
+        <label for="ceilValue">feet AGL</label>
+        <br>
+        <br>
+        <fieldset name="condExclude">
+            <legend>Exclude any reports of:</legend>
+            <div>
+                <input type="checkbox" id="snow" name="snow">
+                <label for="snow">Snow</label>
+            </div>
+            <div>
+                <input type="checkbox" id="rain" name="rain">
+                <label for="rain">Rain</label>
+            </div>
+            <div>
+                <input type="checkbox" id="fog" name="fog">
+                <label for="fog">Fog</label>
+            </div>
+        </fieldset>
+        <br>
+        <br>
         <input type="submit" id="submit">
     </form>
     <div id="result">
 
     </div>
     <script src="/app.js" type="module"></script>
+    <script src="/modules/visSlider.js"></script>
 </body>
 </html>
