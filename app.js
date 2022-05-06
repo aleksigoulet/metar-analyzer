@@ -1,6 +1,8 @@
 import { WxDataHandler } from "./modules/wxHandler.js";
+import { WxRequirements } from "./modules/WxRequirements.js";
 
 const wxHandler = new WxDataHandler();
+
 
 
 //API request url
@@ -18,6 +20,9 @@ button.addEventListener('click', (e) => {
     const station = stationInput.value;
     let startDate = document.getElementById('start').value;
     let endDate = document.getElementById('end').value;
+
+    const wxReqs = new WxRequirements();
+    // console.log(wxReqs);
 
     //remove - from dates for correct API request format
     startDate = startDate.replaceAll('-', '');
@@ -54,7 +59,7 @@ button.addEventListener('click', (e) => {
 
                 resultEl.appendChild(document.createElement('p')).innerHTML = `${daysArr.length} days of data received.`;
 
-                const condReport = wxHandler.conditions(jsonResponse);
+                const condReport = wxHandler.conditions(jsonResponse, wxReqs);
 
                 resultEl.appendChild(document.createElement('p')).innerHTML = `${condReport.total} days analyzed. ${condReport.vfr} days are operationally usable.<br> ${condReport.vfrBoth} days are usable both morning and afternoon.<br> ${condReport.vfrAM} days are usable in the morning only.<br> ${condReport.vfrPM} days are usable in the afternoon only`;
             }

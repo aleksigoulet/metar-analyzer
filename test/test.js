@@ -361,10 +361,18 @@ describe('wxHandler.conditions()', () => {
       ]
     };
 
+    const inputReqs = {
+      vis: 3,
+      ceil: 1000,
+      snow: true,
+      rain: true,
+      fog: true
+    }
+
 
     const expected = {total: 2, vfr: 1, vfrAM: 0, vfrPM: 1, vfrBoth: 0, ifr: 1}
 
-    const result = wxHandler.conditions(inputData);
+    const result = wxHandler.conditions(inputData, inputReqs);
 
     assert.deepStrictEqual(result, expected);
 
@@ -406,6 +414,14 @@ describe('wxHandler.condByHalfDay()', () => {
       ]
     };
 
+    const inputReqs = {
+      vis: 3,
+      ceil: 1000,
+      snow: true,
+      rain: true,
+      fog: true
+    }
+
     const inputArr = wxHandler.seperateHalfDays(inputData);
 
     const expected = [
@@ -413,7 +429,7 @@ describe('wxHandler.condByHalfDay()', () => {
       [false, false]
     ];
 
-    const result = wxHandler.condByHalfDay(inputData, inputArr);
+    const result = wxHandler.condByHalfDay(inputData, inputArr, inputReqs);
 
     assert.deepStrictEqual(result, expected);
 
@@ -456,6 +472,14 @@ describe('wxHandler.condByHalfDay()', () => {
       ]
     };
 
+    const inputReqs = {
+      vis: 3,
+      ceil: 1000,
+      snow: true,
+      rain: true,
+      fog: true
+    }
+
     const inputArr = wxHandler.seperateHalfDays(inputData);
 
     const expected = [
@@ -464,7 +488,7 @@ describe('wxHandler.condByHalfDay()', () => {
       [false, true]
     ];
 
-    const result = wxHandler.condByHalfDay(inputData, inputArr);
+    const result = wxHandler.condByHalfDay(inputData, inputArr, inputReqs);
 
     assert.deepStrictEqual(result, expected);
 
@@ -507,6 +531,14 @@ describe('wxHandler.condByHalfDay()', () => {
       ]
     };
 
+    const inputReqs = {
+      vis: 3,
+      ceil: 1000,
+      snow: true,
+      rain: true,
+      fog: true
+    }
+
     const inputArr = wxHandler.seperateHalfDays(inputData);
 
     const expected = [
@@ -515,7 +547,7 @@ describe('wxHandler.condByHalfDay()', () => {
       [false, true]
     ];
 
-    const result = wxHandler.condByHalfDay(inputData, inputArr);
+    const result = wxHandler.condByHalfDay(inputData, inputArr, inputReqs);
 
     assert.deepStrictEqual(result, expected);
 
@@ -557,9 +589,17 @@ describe('wxHandler.getWxCondCodes()', () => {
       ]
     };
 
+    const inputReqs = {
+      vis: 3,
+      ceil: 1000,
+      snow: true,
+      rain: true,
+      fog: true
+    }
+
     const expected = true;
 
-    const result = wxHandler.getWxCondCodes(inputData, 0, 0);
+    const result = wxHandler.getWxCondCodes(inputData, inputReqs, 0);
 
     assert.strictEqual(result, expected);
 
@@ -597,9 +637,17 @@ describe('wxHandler.getWxCondCodes()', () => {
       ]
     };
 
+    const inputReqs = {
+      vis: 3,
+      ceil: 1000,
+      snow: true,
+      rain: true,
+      fog: true
+    }
+
     const expected = false;
 
-    const result = wxHandler.getWxCondCodes(inputData, 0, 2);
+    const result = wxHandler.getWxCondCodes(inputData, inputReqs, 2);
 
     assert.strictEqual(result, expected);
 

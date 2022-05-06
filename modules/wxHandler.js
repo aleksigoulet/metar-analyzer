@@ -1,8 +1,8 @@
 class WxDataHandler { 
-    conditions(obj) {
+    conditions(obj, wxReqs) {
         const daysIndex = this.seperateHalfDays(obj);
 
-        const sortedCond = this.condByHalfDay(obj, daysIndex);
+        const sortedCond = this.condByHalfDay(obj, daysIndex, wxReqs);
 
         const totalDays = sortedCond.length;
         let vfrDay = 0;
@@ -81,7 +81,7 @@ class WxDataHandler {
         */
     }
 
-    condByHalfDay(obj, arr) { //function that returns whether a half day is suitable or not
+    condByHalfDay(obj, arr, wxReqs) { //function that returns whether a half day is suitable or not
         //variables to store results
         let output = [];
         let singleDay = [];
@@ -100,9 +100,9 @@ class WxDataHandler {
                     for(let j = 0; j < day[i].length; j++) {
                         const vis = this.getVis(obj, day[i][j]);
                         const ceil = this.getCeil(obj, day[i][j]);
-                        const obs = this.getWxCondCodes(obj, 0, day[i][j]);
+                        const obs = this.getWxCondCodes(obj, wxReqs, day[i][j]);
     
-                        if(vis < 3 || (ceil < 1000 && ceil !== null) || obs){
+                        if(vis < wxReqs.vis || (ceil < wxReqs.ceil && ceil !== null) || obs){
                             ifrConds++;
                         } else {
                             vfrConds++;
@@ -234,7 +234,11 @@ class WxDataHandler {
 
         if(condString == null) {
             return false;
-        } else if(condString.includes('snow') || condString.includes('rain') || condString.includes('fog')) {
+        } else if(
+            (condString.includes('snow') && condToFind.snow) || 
+            (condString.includes('rain') && condToFind.rain) || 
+            (condString.includes('fog') && condToFind.fog)
+            ) {
             return true;
         } else {
             return false;
